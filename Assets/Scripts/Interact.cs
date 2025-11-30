@@ -6,9 +6,24 @@ public class Interact : MonoBehaviour, IInteractable
     public string objectMessage;
     public string InteractMessage => objectMessage;
 
+    public Dialogue dialogue;
+
     void IInteractable.Interact()
     {
-        
+        TriggerDialogue();
+    }
+
+    public void TriggerDialogue()
+    {
+        DialogueManager manager = FindObjectOfType<DialogueManager>();
+        if (manager != null)
+        {
+            manager.StartDialogue(dialogue);
+        }
+        else
+        {
+            Debug.LogWarning("No DialogueManager found in scene!");
+        }
     }
 
 

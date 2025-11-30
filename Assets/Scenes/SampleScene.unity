@@ -438,6 +438,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectMessage: Press E to interact
+  dialogue:
+    name: Evelyn Harrow
+    sentences: []
 --- !u!1 &146314167
 GameObject:
   m_ObjectHideFlags: 0

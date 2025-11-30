@@ -9,6 +9,7 @@ public class Raycasting : MonoBehaviour
 
     public TextMeshProUGUI interactionText;
 
+
     IInteractable currentTarget;
 
     float interactionDistance = 5f;
@@ -19,7 +20,7 @@ public class Raycasting : MonoBehaviour
         UpdateInteractable();
         UpdateInteractionText();
 
-        
+
     }
 
     void UpdateInteractable()
@@ -33,19 +34,24 @@ public class Raycasting : MonoBehaviour
 
     void UpdateInteractionText()
     {
-        if (currentTarget != null) {
+        if (currentTarget != null)
+        {
             interactionText.text = currentTarget.InteractMessage;
+            interactionText.transform.parent.gameObject.SetActive(true); // show panel
             return;
         }
+        interactionText.transform.parent.gameObject.SetActive(false);
+
         interactionText.text = string.Empty;
 
     }
 
     void CheckInteractionKey()
     {
-        if (Input.GetKeyDown(KeyCode.E) && currentTarget != null) {
+        if (Input.GetKeyDown(KeyCode.E) && currentTarget != null)
+        {
             currentTarget.Interact();
-  
+
         }
     }
 
