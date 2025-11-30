@@ -1,17 +1,19 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
     public Queue<string> sentences;
     public GameObject dialogBox;
-    public GameObject dialogText;
+    public TMP_Text dialogText;
     public GameObject pressE;
+
+    public bool isActive = false;
 
     void Start()
     {
-        
         sentences = new Queue<string> ();
     }
 
@@ -19,6 +21,7 @@ public class DialogueManager : MonoBehaviour
     {
         Debug.Log("Starting conversation with " + dialogue.name);
         dialogBox.gameObject.SetActive(true);
+        dialogText.gameObject.SetActive(true);
         pressE.gameObject.SetActive(false);
         sentences.Clear();
 
@@ -27,6 +30,7 @@ public class DialogueManager : MonoBehaviour
             sentences.Enqueue(sentence);
         }
 
+        isActive = true;
         DisplayNextSentence();
     }
 
@@ -38,13 +42,21 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        Debug.Log("NUMBER OF SENTENCES:" + sentences.Count);
         string sentence = sentences.Dequeue();
+        
+        dialogText.text = sentence;
+
         Debug.Log(sentence);
     }
 
     void EndDialogue()
     {
         Debug.Log("End of conversation");
+        dialogBox.gameObject.SetActive(false);
+        dialogText.gameObject.SetActive(true);
+        pressE.gameObject.SetActive(true);
+        isActive = false;
     }
 
 }

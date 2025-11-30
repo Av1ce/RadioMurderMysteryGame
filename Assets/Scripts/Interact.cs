@@ -5,7 +5,6 @@ public class Interact : MonoBehaviour, IInteractable
 {
     public string objectMessage;
     public string InteractMessage => objectMessage;
-
     public Dialogue dialogue;
 
     void IInteractable.Interact()
@@ -18,7 +17,14 @@ public class Interact : MonoBehaviour, IInteractable
         DialogueManager manager = FindObjectOfType<DialogueManager>();
         if (manager != null)
         {
-            manager.StartDialogue(dialogue);
+            if (manager.isActive == false)
+            {
+                manager.StartDialogue(dialogue);
+            }
+            else
+            {
+                manager.DisplayNextSentence();
+            }
         }
         else
         {
