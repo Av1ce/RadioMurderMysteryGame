@@ -8,6 +8,7 @@ public class DialogueManager : MonoBehaviour
     public Queue<string> sentences;
     public GameObject dialogBox;
     public TMP_Text dialogText;
+    public TMP_Text nameText;
     public GameObject pressE;
 
     public bool isActive = false;
@@ -22,6 +23,11 @@ public class DialogueManager : MonoBehaviour
         Debug.Log("Starting conversation with " + dialogue.name);
         dialogBox.gameObject.SetActive(true);
         dialogText.gameObject.SetActive(true);
+        if (nameText != null)
+        {
+            nameText.gameObject.SetActive(true);
+            nameText.text = dialogue.name;
+        }
         pressE.gameObject.SetActive(false);
         sentences.Clear();
 
@@ -55,6 +61,11 @@ public class DialogueManager : MonoBehaviour
         Debug.Log("End of conversation");
         dialogBox.gameObject.SetActive(false);
         dialogText.gameObject.SetActive(true);
+        if (nameText != null)
+        {
+            nameText.gameObject.SetActive(false);
+            nameText.text = string.Empty;
+        }
         pressE.gameObject.SetActive(true);
         isActive = false;
     }

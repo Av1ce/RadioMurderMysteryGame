@@ -456,6 +456,16 @@ MonoBehaviour:
     - 'Search the mansion if you must. '
     - "You\u2019ll find no evidence against me. I kept my life with him painfully
       simple."
+  radioDialogue:
+    name: 
+    sentences: []
+  radioObject: {fileID: 0}
+  radioPrefab: {fileID: 0}
+  radioParent: {fileID: 0}
+  enableRadioInteraction: 1
+  radioLocalPosition: {x: 0.2, y: -0.15, z: 0.5}
+  radioLocalEuler: {x: 0, y: 180, z: 0}
+  isKiller: 0
 --- !u!222 &75621944
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -615,6 +625,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!1001 &164945098
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 13385339065999458, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_Name
+      value: Radio
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.314
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.581
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 13385339066235970, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 66df3c5eb0b75424582840a6f8405e9b, type: 3}
 --- !u!1001 &247468591
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1157,6 +1224,16 @@ MonoBehaviour:
       I only clean the rooms."
     - "Everyone keeps staring at me like I know some big secret. I don\u2019t. Really\u2026"
     - "Please don\u2019t make me speak loudly. They all look at me when I do."
+  radioDialogue:
+    name: 
+    sentences: []
+  radioObject: {fileID: 0}
+  radioPrefab: {fileID: 0}
+  radioParent: {fileID: 0}
+  enableRadioInteraction: 1
+  radioLocalPosition: {x: 0.2, y: -0.15, z: 0.5}
+  radioLocalEuler: {x: 0, y: 180, z: 0}
+  isKiller: 0
 --- !u!1001 &442096093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1434,6 +1511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogBox: {fileID: 984688461}
   dialogText: {fileID: 1902606697}
+  nameText: {fileID: 0}
   pressE: {fileID: 146314167}
   isActive: 0
 --- !u!4 &951938424
@@ -1719,6 +1797,16 @@ MonoBehaviour:
     - Everything between the victim and me was business. Nothing more. Nothing less.
     - "If you think I had something to gain, say so. We\u2019re all adults here."
     - "Ask what you will. I\u2019ve nothing to fear from the truth."
+  radioDialogue:
+    name: 
+    sentences: []
+  radioObject: {fileID: 0}
+  radioPrefab: {fileID: 0}
+  radioParent: {fileID: 0}
+  enableRadioInteraction: 1
+  radioLocalPosition: {x: 0.2, y: -0.15, z: 0.5}
+  radioLocalEuler: {x: 0, y: 180, z: 0}
+  isKiller: 0
 --- !u!1 &1473284966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,6 +1940,16 @@ MonoBehaviour:
     - "If you want the facts, I\u2019ll give them. But don\u2019t expect me to reveal
       my sources\u2014not in front of this audience."
     - "Go on, ask. I\u2019ll answer honestly. Mostly."
+  radioDialogue:
+    name: 
+    sentences: []
+  radioObject: {fileID: 0}
+  radioPrefab: {fileID: 0}
+  radioParent: {fileID: 0}
+  enableRadioInteraction: 1
+  radioLocalPosition: {x: 0.2, y: -0.15, z: 0.5}
+  radioLocalEuler: {x: 0, y: 180, z: 0}
+  isKiller: 0
 --- !u!1 &1606082131
 GameObject:
   m_ObjectHideFlags: 0
@@ -1984,6 +2082,16 @@ MonoBehaviour:
     - "Yeah, we fought earlier. Everyone knows. It doesn\u2019t make me a murderer."
     - Look, can we stop pretending? All of us had issues with him. Not just me.
     - "Ask your questions, but don\u2019t twist my answers. I\u2019m already on edge."
+  radioDialogue:
+    name: 
+    sentences: []
+  radioObject: {fileID: 0}
+  radioPrefab: {fileID: 0}
+  radioParent: {fileID: 0}
+  enableRadioInteraction: 1
+  radioLocalPosition: {x: 0.2, y: -0.15, z: 0.5}
+  radioLocalEuler: {x: 0, y: 180, z: 0}
+  isKiller: 0
 --- !u!4 &1760622054 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4135013735270702856, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
@@ -2227,3 +2335,4 @@ SceneRoots:
   - {fileID: 458372564}
   - {fileID: 951938424}
   - {fileID: 75621941}
+  - {fileID: 164945098}

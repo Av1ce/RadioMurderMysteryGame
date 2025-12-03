@@ -14,11 +14,27 @@ public class Raycasting : MonoBehaviour
 
     float interactionDistance = 5f;
 
+    void Start()
+    {
+        if (playerCamera == null)
+        {
+            playerCamera = Camera.main;
+            if (playerCamera == null)
+            {
+                Debug.LogWarning("Raycasting: playerCamera not assigned and no Camera.main found. Assign a camera to Raycasting.playerCamera.");
+            }
+            else
+            {
+                Debug.Log("Raycasting: assigned playerCamera to Camera.main");
+            }
+        }
+    }
+
     void Update()
     {
-        CheckInteractionKey();
         UpdateInteractable();
         UpdateInteractionText();
+        CheckInteractionKey();
 
 
     }
@@ -36,7 +52,17 @@ public class Raycasting : MonoBehaviour
     {
         if (currentTarget != null)
         {
-            interactionText.text = currentTarget.InteractMessage;
+            // Show basic message
+            string msg = currentTarget.InteractMessage;
+
+            // If the target is an Interact and has radio enabled, show the Q hint
+            var concrete = currentTarget as Interact;
+            if (concrete != null && concrete.enableRadioInteraction && (concrete.radioDialogue != null || concrete.radioObject != null))
+            {
+                msg += "  <color=#AAAAAA>(E to talk, Q to pull out radio)</color>";
+            }
+
+            interactionText.text = msg;
             interactionText.transform.parent.gameObject.SetActive(true); // show panel
             return;
         }
@@ -52,6 +78,27 @@ public class Raycasting : MonoBehaviour
         {
             currentTarget.Interact();
 
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && currentTarget != null)
+        {
+            Debug.Log("Raycasting: Q pressed. currentTarget=" + (currentTarget == null ? "null" : currentTarget.ToString()));
+            var concrete = currentTarget as Interact;
+            if (concrete != null)
+            {
+                Debug.Log("Raycasting: currentTarget is Interact. enableRadioInteraction=" + concrete.enableRadioInteraction + ", radioObject=" + (concrete.radioObject != null) + ", radioPrefab=" + (concrete.radioPrefab != null));
+            }
+
+            if (concrete != null && concrete.enableRadioInteraction)
+            {
+                concrete.InteractWithRadio();
+            }
+            else
+            {
+                // fallback to normal interaction
+                Debug.Log("Raycasting: falling back to normal Interact");
+                currentTarget.Interact();
+            }
         }
     }
 
