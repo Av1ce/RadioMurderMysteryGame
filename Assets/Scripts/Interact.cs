@@ -68,48 +68,83 @@ public class Interact : MonoBehaviour, IInteractable
             return;
         }
 
-        // Show radio object if assigned (scene instance)
-        if (radioObject != null)
+        // Show radio: always create a fresh instance (or clone the assigned object) and parent it to the camera/radioParent.
+        // This avoids the radio becoming 'stuck' at a previous transform or only appearing the first time.
+        Transform parentTransform = radioParent != null ? radioParent : (Camera.main != null ? Camera.main.transform : null);
+
+        // Attempt to auto-find a scene radio template if nothing provided (do this BEFORE instantiation)
+        GameObject templateRadio = null;
+        if (radioObject == null && radioPrefab == null)
         {
-            radioObject.SetActive(true);
-            Debug.Log("Interact: activated radioObject instance for " + gameObject.name);
-        }
-        else if (radioPrefab != null)
-        {
-            // Instantiate prefab under radioParent (or main camera) so it appears in player's hands
-            if (spawnedRadio == null)
+            GameObject sceneRadio = GameObject.Find("Radio");
+            if (sceneRadio == null)
             {
-                Transform parent = radioParent != null ? radioParent : (Camera.main != null ? Camera.main.transform : null);
-                if (parent != null)
+                var all = GameObject.FindObjectsOfType<GameObject>();
+                foreach (var go in all)
                 {
-                    spawnedRadio = GameObject.Instantiate(radioPrefab, parent);
-                    spawnedRadio.transform.localPosition = Vector3.zero;
-                    spawnedRadio.transform.localRotation = Quaternion.identity;
-                    Debug.Log("Interact: instantiated radioPrefab under parent " + parent.name + " for " + gameObject.name);
-                }
-                else
-                {
-                    // Try to find a camera to parent to, and apply default local offset so it appears in player's view
-                    Transform parentFallback = Camera.main != null ? Camera.main.transform : null;
-                    if (parentFallback != null)
+                    if (go.name.ToLower().Contains("radio"))
                     {
-                        spawnedRadio = GameObject.Instantiate(radioPrefab, parentFallback);
-                        spawnedRadio.transform.localPosition = radioLocalPosition;
-                        spawnedRadio.transform.localEulerAngles = radioLocalEuler;
-                        Debug.Log("Interact: instantiated radioPrefab under Camera.main with default offset for " + gameObject.name);
-                    }
-                    else
-                    {
-                        spawnedRadio = GameObject.Instantiate(radioPrefab);
-                        Debug.Log("Interact: instantiated radioPrefab at world origin for " + gameObject.name);
+                        sceneRadio = go;
+                        break;
                     }
                 }
+            }
+
+            if (sceneRadio != null)
+            {
+                templateRadio = sceneRadio;
+                Debug.Log("Interact: auto-found scene radio template '" + sceneRadio.name + "' for " + gameObject.name);
+            }
+        }
+        else if (radioObject != null)
+        {
+            templateRadio = radioObject;
+        }
+
+        // Clean up any previously spawned radio instance to avoid duplicates or stale transforms
+        if (spawnedRadio != null)
+        {
+            Debug.Log("Interact: destroying previous spawned radio before creating a new one for " + gameObject.name);
+            GameObject.Destroy(spawnedRadio);
+            spawnedRadio = null;
+        }
+
+        // Instantiate either a provided prefab or a clone of the template radio (if available)
+        if (radioPrefab != null)
+        {
+            if (parentTransform != null)
+            {
+                spawnedRadio = GameObject.Instantiate(radioPrefab, parentTransform);
+                spawnedRadio.transform.localPosition = radioLocalPosition;
+                spawnedRadio.transform.localEulerAngles = radioLocalEuler;
+                Debug.Log("Interact: instantiated radioPrefab under parent " + parentTransform.name + " for " + gameObject.name);
             }
             else
             {
-                spawnedRadio.SetActive(true);
-                Debug.Log("Interact: re-activated previously spawned radio for " + gameObject.name);
+                spawnedRadio = GameObject.Instantiate(radioPrefab);
+                spawnedRadio.transform.position = radioLocalPosition;
+                spawnedRadio.transform.eulerAngles = radioLocalEuler;
+                Debug.Log("Interact: instantiated radioPrefab at world position for " + gameObject.name);
             }
+            spawnedRadio.SetActive(true);
+        }
+        else if (templateRadio != null)
+        {
+            if (parentTransform != null)
+            {
+                spawnedRadio = GameObject.Instantiate(templateRadio, parentTransform);
+                spawnedRadio.transform.localPosition = radioLocalPosition;
+                spawnedRadio.transform.localEulerAngles = radioLocalEuler;
+                Debug.Log("Interact: instantiated clone of template radio under " + parentTransform.name + " for " + gameObject.name);
+            }
+            else
+            {
+                spawnedRadio = GameObject.Instantiate(templateRadio);
+                spawnedRadio.transform.position = radioLocalPosition;
+                spawnedRadio.transform.eulerAngles = radioLocalEuler;
+                Debug.Log("Interact: instantiated clone of template radio at world position for " + gameObject.name);
+            }
+            spawnedRadio.SetActive(true);
         }
 
         // Generate a radio-specific dialogue dynamically so it sounds like the radio is reading their mind.
@@ -168,15 +203,29 @@ public class Interact : MonoBehaviour, IInteractable
         };
 
         string[] chosen;
-        if (isKiller)
+        // Prefer a stable mapping per-character using the GameObject name hash.
+        // Fall back to InstanceID when name is empty to guarantee variability.
+        int stableHash;
+        if (!string.IsNullOrEmpty(gameObject.name))
         {
-            int idx = Mathf.Abs(gameObject.GetInstanceID()) % killerVariants.Length;
-            chosen = killerVariants[idx];
+            stableHash = Mathf.Abs(gameObject.name.GetHashCode());
         }
         else
         {
-            int idx = Mathf.Abs(gameObject.GetInstanceID()) % nonKillerVariants.Length;
+            stableHash = Mathf.Abs(gameObject.GetInstanceID());
+        }
+
+        if (isKiller)
+        {
+            int idx = stableHash % killerVariants.Length;
+            chosen = killerVariants[idx];
+            Debug.Log($"Interact: selected killer radio variant {idx} for '{gameObject.name}' (hash={stableHash})");
+        }
+        else
+        {
+            int idx = stableHash % nonKillerVariants.Length;
             chosen = nonKillerVariants[idx];
+            Debug.Log($"Interact: selected non-killer radio variant {idx} for '{gameObject.name}' (hash={stableHash})");
         }
 
         // Replace subject placeholders in chosen lines (they already include subject via interpolation), assign
@@ -193,42 +242,11 @@ public class Interact : MonoBehaviour, IInteractable
             manager.DisplayNextSentence();
         }
 
-        // If no radioObject or radioPrefab assigned, attempt to find a scene Radio object automatically
-        if (radioObject == null && radioPrefab == null)
-        {
-            // Try find by name first
-            GameObject sceneRadio = GameObject.Find("Radio");
-            if (sceneRadio == null)
-            {
-                // fallback to any object whose name contains "radio" (case-insensitive)
-                var all = GameObject.FindObjectsOfType<GameObject>();
-                foreach (var go in all)
-                {
-                    if (go.name.ToLower().Contains("radio"))
-                    {
-                        sceneRadio = go;
-                        break;
-                    }
-                }
-            }
+        // Note: we intentionally do not assign a found scene radio to the instance `radioObject` here.
+        // Cloning (spawnedRadio) is used above so the original scene template is not mutated or left active.
 
-            if (sceneRadio != null)
-            {
-                // parent under camera if possible so it appears in view
-                Transform parent = radioParent != null ? radioParent : (Camera.main != null ? Camera.main.transform : null);
-                if (parent != null)
-                {
-                    sceneRadio.transform.SetParent(parent, false);
-                    sceneRadio.transform.localPosition = radioLocalPosition;
-                    sceneRadio.transform.localEulerAngles = radioLocalEuler;
-                }
-                radioObject = sceneRadio; // use it as the radioObject
-                Debug.Log("Interact: auto-found scene radio '" + sceneRadio.name + "' and assigned as radioObject for " + gameObject.name);
-            }
-        }
-
-        // Start coroutine to hide/destroy whichever radio was shown
-        if (radioObject != null || radioPrefab != null)
+        // Start coroutine to hide/destroy the spawned radio when the dialogue ends
+        if (spawnedRadio != null)
         {
             StartCoroutine(HideRadioWhenDialogueEnds(manager));
         }
@@ -246,11 +264,6 @@ public class Interact : MonoBehaviour, IInteractable
             Debug.Log("Interact: destroying spawned radio for " + gameObject.name);
             GameObject.Destroy(spawnedRadio);
             spawnedRadio = null;
-        }
-        else if (radioObject != null)
-        {
-            Debug.Log("Interact: deactivating radioObject instance for " + gameObject.name);
-            radioObject.SetActive(false);
         }
     }
 
