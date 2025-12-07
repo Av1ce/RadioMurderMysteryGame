@@ -80,6 +80,12 @@ public class Raycasting : MonoBehaviour
 
         }
 
+        if (Input.GetKeyDown(KeyCode.F) && currentTarget != null) { 
+
+            currentTarget.Accuse(); 
+        
+        }
+
         if (Input.GetKeyDown(KeyCode.Q) && currentTarget != null)
         {
             Debug.Log("Raycasting: Q pressed. currentTarget=" + (currentTarget == null ? "null" : currentTarget.ToString()));

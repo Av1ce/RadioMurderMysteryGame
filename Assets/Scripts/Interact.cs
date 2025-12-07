@@ -1,6 +1,7 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class Interact : MonoBehaviour, IInteractable
 {
     [Header("Interaction")]
@@ -29,6 +30,25 @@ public class Interact : MonoBehaviour, IInteractable
         TriggerDialogue();
     }
 
+    void IInteractable.Accuse()
+    {
+        AccuseKiller();
+    }
+
+    public void AccuseKiller()
+    {
+        if (isKiller)
+        {
+            SceneManager.LoadScene("WinScene");
+            Debug.LogWarning("you won");
+        }
+        else
+        {
+            SceneManager.LoadScene("LoseScene");
+            Debug.LogWarning("you lose");
+        }
+
+        }
     public void TriggerDialogue()
     {
         DialogueManager manager = FindObjectOfType<DialogueManager>();
@@ -266,5 +286,7 @@ public class Interact : MonoBehaviour, IInteractable
             spawnedRadio = null;
         }
     }
+
+
 
 }
