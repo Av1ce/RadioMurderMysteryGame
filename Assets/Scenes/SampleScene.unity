@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 75621943}
   - component: {fileID: 75621944}
   m_Layer: 0
-  m_Name: Bob
+  m_Name: Evelyn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -979,6 +979,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 146314168}
+  - {fileID: 1902606696}
   m_Father: {fileID: 62671733}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1252,7 +1253,7 @@ GameObject:
   - component: {fileID: 412606908}
   - component: {fileID: 412606912}
   m_Layer: 0
-  m_Name: Capsule (3)
+  m_Name: Lily
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1670,7 +1671,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 620c0142e25042449a1bfb6b319bce68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogBox: {fileID: 984688461}
   dialogText: {fileID: 1902606697}
   nameText: {fileID: 0}
   pressE: {fileID: 146314167}
@@ -1721,8 +1721,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1902606696}
+  m_Children: []
   m_Father: {fileID: 62671733}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -1864,7 +1863,7 @@ GameObject:
   - component: {fileID: 1352925760}
   - component: {fileID: 1352925764}
   m_Layer: 0
-  m_Name: Capsule (1)
+  m_Name: Thomas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2005,7 +2004,7 @@ GameObject:
   - component: {fileID: 1473284967}
   - component: {fileID: 1473284971}
   m_Layer: 0
-  m_Name: Capsule (4)
+  m_Name: Clara
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2148,7 +2147,7 @@ GameObject:
   - component: {fileID: 1606082132}
   - component: {fileID: 1606082136}
   m_Layer: 0
-  m_Name: Capsule (2)
+  m_Name: Marcus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2299,7 +2298,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1902606696
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2309,14 +2308,14 @@ RectTransform:
   m_GameObject: {fileID: 1902606695}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6994127, y: 0.6994127, z: 0.6994127}
+  m_LocalScale: {x: 0.7, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 984688462}
+  m_Father: {fileID: 337363515}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 128.46657, y: -251.89496}
+  m_AnchoredPosition: {x: 179.38, y: -307.615}
   m_SizeDelta: {x: 338.76, y: 434.35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1902606697
@@ -2349,7 +2348,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2371,9 +2370,9 @@ MonoBehaviour:
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 60
+  m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

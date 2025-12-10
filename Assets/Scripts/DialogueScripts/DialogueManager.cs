@@ -6,7 +6,6 @@ using TMPro;
 public class DialogueManager : MonoBehaviour
 {
     public Queue<string> sentences;
-    public GameObject dialogBox;
     public TMP_Text dialogText;
     public TMP_Text nameText;
     public GameObject pressE;
@@ -21,7 +20,6 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue(Dialogue dialogue)
     {
         Debug.Log("Starting conversation with " + dialogue.name);
-        dialogBox.gameObject.SetActive(true);
         dialogText.gameObject.SetActive(true);
         if (nameText != null)
         {
@@ -59,8 +57,7 @@ public class DialogueManager : MonoBehaviour
     void EndDialogue()
     {
         Debug.Log("End of conversation");
-        dialogBox.gameObject.SetActive(false);
-        dialogText.gameObject.SetActive(true);
+        dialogText.gameObject.SetActive(false);
         if (nameText != null)
         {
             nameText.gameObject.SetActive(false);
