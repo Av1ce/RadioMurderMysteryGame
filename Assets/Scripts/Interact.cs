@@ -25,6 +25,47 @@ public class Interact : MonoBehaviour, IInteractable
     [Tooltip("Tick this on the one NPC that is the killer. The radio will generate slightly different 'mind-reading' lines for them.")]
     public bool isKiller = false;
 
+  
+    static readonly System.Collections.Generic.Dictionary<string, string[]> perCharacterRadio = new System.Collections.Generic.Dictionary<string, string[]>()
+    {
+        { "Evelyn", new string[] {
+            "...tuning... sift through the quiet corners of a mourning heart...",
+            "Evelyn remembers a lullaby turned argument, a teacup left in haste...",
+            "A shadow of regret passes — not malice, but an ache that lingers...",
+            "She thinks of locked drawers and promises she couldn't keep...",
+            "The signal trembles, soft and sorrowful."
+        }},
+        { "Lily", new string[] {
+            "...static, then the hush of careful steps...",
+            "Lily sees linens folded, a stain she can't yet name...",
+            "Her mind skips: doors, footsteps, the echo of hurried apologies...",
+            "She clutches a memory of a light turned out too soon...",
+            "The broadcast fades, leaving uncertainty in its wake."
+        }},
+        { "Thomas", new string[] {
+            "...frequency picks up an assertive recollection...",
+            "Thomas rehearses a retort, a practiced defense and a clipped laugh...",
+            "A ledger of grievances flickers through his head like ledger paper...",
+            "He pauses on one late invoice and a name crossed out in haste...",
+            "Static eats the rest; the thought is sharper than it should be."
+        }},
+        { "Marcus", new string[] {
+            "...interference, then a prickling defensiveness...",
+            "Marcus counts the ways he was slighted, and the ways he struck back...",
+            "An image: hands clenched, then letting go — or pretending to...",
+            "He imagines others watching, waiting for him to falter...",
+            "The frequency coughs and leaves an aftertaste of anger."
+        }},
+        { "Clara", new string[] {
+            // Clara is the killer in the scene; keep shorter, slightly more suggestive lines — but we still leave isKiller logic to handle the real variant.
+            "...a tension under the breath, an almost-smile in memory...",
+            "Clara recalls a deliberate step, a light adjusted to conceal...",
+            "A thought that tastes like opportunity, not regret...",
+            "Something she tells herself to remember, or to forget...",
+            "Static smothers a trailing confession."
+        }}
+    };
+
     void IInteractable.Interact()
     {
         TriggerDialogue();
@@ -167,11 +208,51 @@ public class Interact : MonoBehaviour, IInteractable
             spawnedRadio.SetActive(true);
         }
 
+        // If the developer has provided a custom `radioDialogue` in the inspector (non-empty), prefer it.
+        if (radioDialogue != null && radioDialogue.sentences != null && radioDialogue.sentences.Length > 0)
+        {
+            if (manager.isActive == false)
+            {
+                manager.StartDialogue(radioDialogue);
+            }
+            else
+            {
+                manager.DisplayNextSentence();
+            }
+
+            // start cleanup coroutine for the spawned radio (if any) and return
+            if (spawnedRadio != null)
+            {
+                StartCoroutine(HideRadioWhenDialogueEnds(manager));
+            }
+            return;
+        }
+
         // Generate a radio-specific dialogue dynamically so it sounds like the radio is reading their mind.
-        // We create placeholder lines for now. This always overrides existing dialogue during radio interaction.
+        // We create placeholder lines for now. This will be overridden by per-character map if present.
         Dialogue radioGenerated = new Dialogue();
         radioGenerated.name = "Radio";
         string subject = string.IsNullOrEmpty(gameObject.name) ? "them" : gameObject.name;
+
+        // First, check per-character explicit map
+        if (perCharacterRadio.TryGetValue(gameObject.name, out var explicitLines) && explicitLines != null && explicitLines.Length > 0)
+        {
+            radioGenerated.sentences = explicitLines;
+            if (manager.isActive == false)
+            {
+                manager.StartDialogue(radioGenerated);
+            }
+            else
+            {
+                manager.DisplayNextSentence();
+            }
+
+            if (spawnedRadio != null)
+            {
+                StartCoroutine(HideRadioWhenDialogueEnds(manager));
+            }
+            return;
+        }
         // Create several subtle variants so different NPCs sound different.
         // Use the GameObject instance id to pick a variant deterministically per NPC.
         string[][] killerVariants = new string[][] {
