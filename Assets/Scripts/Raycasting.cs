@@ -59,7 +59,7 @@ public class Raycasting : MonoBehaviour
             var concrete = currentTarget as Interact;
             if (concrete != null && concrete.enableRadioInteraction && (concrete.radioDialogue != null || concrete.radioObject != null))
             {
-                msg += "  <color=#AAAAAA>(E to talk, Q to pull out radio)</color>";
+                msg += "<color=#AAAAAA> </color>" + currentTarget.GetName;
             }
 
             interactionText.text = msg;

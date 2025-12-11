@@ -7,6 +7,9 @@ public class Interact : MonoBehaviour, IInteractable
     [Header("Interaction")]
     public string objectMessage;
     public string InteractMessage => objectMessage;
+
+    public string GetName => dialogue.name;
+
     public Dialogue dialogue;
 
     [Header("Radio (optional)")]
@@ -246,6 +249,7 @@ public class Interact : MonoBehaviour, IInteractable
             int idx = stableHash % nonKillerVariants.Length;
             chosen = nonKillerVariants[idx];
             Debug.Log($"Interact: selected non-killer radio variant {idx} for '{gameObject.name}' (hash={stableHash})");
+            Debug.Log("HELLO");
         }
 
         // Replace subject placeholders in chosen lines (they already include subject via interpolation), assign
