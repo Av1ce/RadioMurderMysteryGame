@@ -275,6 +275,7 @@ public class Interact : MonoBehaviour, IInteractable
             spawnedRadio.SetActive(true);
         }
 
+        Dialogue radioGenerated = new Dialogue();
         radioGenerated.name = "Radio";
         string subject = string.IsNullOrEmpty(gameObject.name) ? "them" : gameObject.name;
         
@@ -327,99 +328,22 @@ public class Interact : MonoBehaviour, IInteractable
             return;
         }
 
-        string[][] killerVariants = new string[][] {
-            new string[] {
-                "...tuning... picking up faint thoughts...",
-                $"A cold fragment in {subject}'s mind... a flash of hands, a slammed door...",
-                "They replay the scene: a step too many, a breath held too long...",
-                $"A voice trails off: 'I kept thinking, if they hadn't pushed me, maybe...'",
-                "The signal warbles. Static swallows the thought."
-            },
-            new string[] {
-                "Static at first, then a memory surfaces...",
-                $"{subject} pictures a knife, then shakes their head at the image...",
-                "A hurried whisper: 'It wasn't supposed to happen like that'...",
-                "They catch themselves smiling nervously, as if rehearsing an excuse...",
-                "The broadcast crinkles and then goes quiet."
-            },
-            new string[] {
-                "Soft interference... then a flash of motion...",
-                $"A fragment: a stumble, a hand grabbing, {subject} counting heartbeats...",
-                "They mutter to themselves: 'I didn't mean—' and stop mid-thought...",
-                "An image fades: the room, the lamp, the sudden silence...",
-                "Then only static remains."
-            }
-        };
-
-        string[][] nonKillerVariants = new string[][] {
-            new string[] {
-                "...tuning... stray impressions surfacing...",
-                $"Faint memory in {subject}'s head: a shout, a lamp overturned...",
-                "They remember arguing, then leaving the room in a hurry...",
-                $"A passing thought: 'I saw someone run; I thought it was over then.'",
-                "Static. The memory dims and drifts away."
-            },
-            new string[] {
-                "The frequency catches a nervous recollection...",
-                $"{subject} recalls footsteps in the hallway and a slammed door...",
-                "They mention someone else leaving the house early that night...",
-                "A distracted line: 'It was him, I just... I couldn't tell for sure'...",
-                "The signal flickers and peters out."
-            },
-            new string[] {
-                "A faint hum, then a memory slips through...",
-                $"{subject} thinks about an argument and a thrown glass...",
-                "They say: 'I ran away because I was scared'—more shocked than guilty...",
-                "The impression is of panic, not planning...",
-                "Static covers the rest."
-            }
-        };
-
-        string[] chosen;
-
-        int stableHash;
-        if (!string.IsNullOrEmpty(gameObject.name))
-        {
-            stableHash = Mathf.Abs(gameObject.name.GetHashCode());
-        }
-        else
-        {
-            stableHash = Mathf.Abs(gameObject.GetInstanceID());
-        }
-
-        if (isKiller)
-        {
-            int idx = stableHash % killerVariants.Length;
-            chosen = killerVariants[idx];
-            Debug.Log($"Interact: selected killer radio variant {idx} for '{gameObject.name}' (hash={stableHash})");
-        }
-        else
-        {
-            int idx = stableHash % nonKillerVariants.Length;
-            chosen = nonKillerVariants[idx];
-            Debug.Log($"Interact: selected non-killer radio variant {idx} for '{gameObject.name}' (hash={stableHash})");
-            Debug.Log("HELLO");
-        }
-
-
-        radioGenerated.sentences = chosen;
-
-        Dialogue toUse = radioGenerated;
-
+       
+        Debug.LogWarning($"Interact: no per-character radio variants found for '{gameObject.name}'; falling back to normal dialogue.");
         if (manager.isActive == false)
         {
-            manager.StartDialogue(toUse);
+            manager.StartDialogue(dialogue);
         }
         else
         {
             manager.DisplayNextSentence();
         }
 
-  
         if (spawnedRadio != null)
         {
             StartCoroutine(HideRadioWhenDialogueEnds(manager));
         }
+        return;
     }
 
     IEnumerator HideRadioWhenDialogueEnds(DialogueManager manager)
