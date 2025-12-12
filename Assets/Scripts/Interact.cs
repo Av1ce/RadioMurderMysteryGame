@@ -179,12 +179,12 @@ public class Interact : MonoBehaviour, IInteractable
         }
     }
 
-    // Called when player presses the radio key (Q)
+
     public void InteractWithRadio()
     {
         if (!enableRadioInteraction)
         {
-            // fallback to normal interaction
+
             TriggerDialogue();
             return;
         }
@@ -198,11 +198,10 @@ public class Interact : MonoBehaviour, IInteractable
             return;
         }
 
-        // Show radio: always create a fresh instance (or clone the assigned object) and parent it to the camera/radioParent.
-        // This avoids the radio becoming 'stuck' at a previous transform or only appearing the first time.
+
         Transform parentTransform = radioParent != null ? radioParent : (Camera.main != null ? Camera.main.transform : null);
 
-        // Attempt to auto-find a scene radio template if nothing provided (do this BEFORE instantiation)
+
         GameObject templateRadio = null;
         if (radioObject == null && radioPrefab == null)
         {
@@ -231,7 +230,6 @@ public class Interact : MonoBehaviour, IInteractable
             templateRadio = radioObject;
         }
 
-        // Clean up any previously spawned radio instance to avoid duplicates or stale transforms
         if (spawnedRadio != null)
         {
             Debug.Log("Interact: destroying previous spawned radio before creating a new one for " + gameObject.name);
@@ -239,7 +237,7 @@ public class Interact : MonoBehaviour, IInteractable
             spawnedRadio = null;
         }
 
-        // Instantiate either a provided prefab or a clone of the template radio (if available)
+
         if (radioPrefab != null)
         {
             if (parentTransform != null)
@@ -277,12 +275,9 @@ public class Interact : MonoBehaviour, IInteractable
             spawnedRadio.SetActive(true);
         }
 
-        // Generate a radio-specific dialogue dynamically so it sounds like the radio is reading their mind.
-        // We create placeholder lines for now. This always overrides existing dialogue during radio interaction.
-        Dialogue radioGenerated = new Dialogue();
         radioGenerated.name = "Radio";
         string subject = string.IsNullOrEmpty(gameObject.name) ? "them" : gameObject.name;
-        // If developer assigned a radioDialogue in the inspector, prefer it and don't override.
+        
         if (radioDialogue != null && radioDialogue.sentences != null && radioDialogue.sentences.Length > 0)
         {
             if (manager.isActive == false)
@@ -300,7 +295,7 @@ public class Interact : MonoBehaviour, IInteractable
             }
             return;
         }
-        // First, check per-character explicit map (each entry contains multiple variant arrays)
+       
         if (perCharacterRadio.TryGetValue(gameObject.name, out var explicitVariants) && explicitVariants != null && explicitVariants.Length > 0)
         {
             int variantIndex = 0;
@@ -331,8 +326,7 @@ public class Interact : MonoBehaviour, IInteractable
             }
             return;
         }
-        // Create several subtle variants so different NPCs sound different.
-        // Use the GameObject instance id to pick a variant deterministically per NPC.
+
         string[][] killerVariants = new string[][] {
             new string[] {
                 "...tuning... picking up faint thoughts...",
@@ -382,8 +376,7 @@ public class Interact : MonoBehaviour, IInteractable
         };
 
         string[] chosen;
-        // Prefer a stable mapping per-character using the GameObject name hash.
-        // Fall back to InstanceID when name is empty to guarantee variability.
+
         int stableHash;
         if (!string.IsNullOrEmpty(gameObject.name))
         {
@@ -408,7 +401,7 @@ public class Interact : MonoBehaviour, IInteractable
             Debug.Log("HELLO");
         }
 
-        // Replace subject placeholders in chosen lines (they already include subject via interpolation), assign
+
         radioGenerated.sentences = chosen;
 
         Dialogue toUse = radioGenerated;
@@ -422,10 +415,7 @@ public class Interact : MonoBehaviour, IInteractable
             manager.DisplayNextSentence();
         }
 
-        // Note: we intentionally do not assign a found scene radio to the instance `radioObject` here.
-        // Cloning (spawnedRadio) is used above so the original scene template is not mutated or left active.
-
-        // Start coroutine to hide/destroy the spawned radio when the dialogue ends
+  
         if (spawnedRadio != null)
         {
             StartCoroutine(HideRadioWhenDialogueEnds(manager));
